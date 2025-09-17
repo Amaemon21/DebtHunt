@@ -1,0 +1,76 @@
+using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class InputSystem : IDisposable
+{
+    private readonly GameInputs _gameInputs;
+
+    public Vector2 MoveDirection { get; private set; }
+    public Vector2 LookDirection { get; private set; }
+    
+    public float HotbarScroll { get; private set; }
+    
+    public event Action JumpChanged;
+    public event Action InteractChanged;
+    public event Action InventoryChanged;
+
+    public InputSystem()
+    {
+        _gameInputs = new GameInputs();
+        
+        _gameInputs.Enable();
+
+        _gameInputs.Player.Move.performed += OnMove;
+        _gameInputs.Player.Move.canceled += OnMove;
+        
+        _gameInputs.Player.Look.performed += OnLook;
+        _gameInputs.Player.Look.canceled += OnLook;
+        
+        _gameInputs.Player.HotbarScroll.performed += OnHotbarScroll;
+        _gameInputs.Player.HotbarScroll.canceled += OnHotbarScroll;
+        
+        _gameInputs.Player.Jump.performed += OnJump;
+        
+        _gameInputs.Player.Interact.performed += OnInteract;
+        
+        _gameInputs.UI.Inventory.performed += OnInventory;
+    }
+    
+    public void EnablePlayerMap() => _gameInputs.Player.Enable();
+
+    public void DisablePlayerMap() => _gameInputs.Player.Disable();
+
+    private void OnMove(InputAction.CallbackContext ctx) => MoveDirection = ctx.ReadValue<Vector2>();
+
+    private void OnLook(InputAction.CallbackContext ctx) => LookDirection = ctx.ReadValue<Vector2>();
+
+    private void OnHotbarScroll(InputAction.CallbackContext ctx) => HotbarScroll = ctx.ReadValue<float>();
+    
+    private void OnJump(InputAction.CallbackContext ctx) => JumpChanged?.Invoke();
+    
+    private void OnInteract(InputAction.CallbackContext obj) => InteractChanged?.Invoke();
+    
+    private void OnInventory(InputAction.CallbackContext obj) => InventoryChanged?.Invoke();
+
+    public void Dispose()
+    {
+        _gameInputs.Player.Move.performed -= OnMove;
+        _gameInputs.Player.Move.canceled -= OnMove;
+
+        _gameInputs.Player.Look.performed -= OnLook;
+        _gameInputs.Player.Look.canceled -= OnLook;
+        
+        _gameInputs.Player.HotbarScroll.performed -= OnHotbarScroll;
+        _gameInputs.Player.HotbarScroll.canceled -= OnHotbarScroll;
+
+        _gameInputs.Player.Jump.performed -= OnJump;
+        
+        _gameInputs.Player.Interact.performed -= OnInteract;
+        
+        _gameInputs.UI.Inventory.performed -= OnInventory;
+
+        _gameInputs.Disable();
+        _gameInputs.Dispose();
+    }
+}
