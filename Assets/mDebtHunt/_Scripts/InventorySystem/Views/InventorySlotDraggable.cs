@@ -13,11 +13,11 @@ namespace Inventory
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (_inventorySlotView.Slot.GetItem() != null)
+            if (!_inventorySlotView.Slot.IsEmpty)
             {
                 _draggableSlot.gameObject.SetActive(true);
 
-                _draggableSlot.Icon.sprite = _inventorySlotView.Slot.GetItem().ItemIcon;
+                _draggableSlot.Icon.sprite = _inventorySlotView.Slot.Config.ItemIcon;
                 
                 _draggableSlot.SlotCoordA = _inventorySlotView.Slot.Index;
             }

@@ -17,7 +17,7 @@ public class InventorySlotView : MonoBehaviour
         Refresh();
     }
 
-    public void Refresh()
+    private void Refresh()
     {
         if (_slot == null || _slot.IsEmpty)
         {
@@ -27,9 +27,9 @@ public class InventorySlotView : MonoBehaviour
         }
 
         _iconImage.enabled = true;
-        _iconImage.sprite = _slot.GetItem().ItemIcon;
+        _iconImage.sprite = _slot.Config.ItemIcon;
 
-        if (_slot.GetItem().IsStackable && _slot.Amount > 1)
+        if (_slot.Config.IsStackable && _slot.Amount > 1)
             _amountText.text = _slot.Amount.ToString();
         else
             _amountText.text = "";

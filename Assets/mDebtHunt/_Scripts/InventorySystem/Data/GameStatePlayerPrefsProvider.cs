@@ -9,9 +9,9 @@ public class GameStatePlayerPrefsProvider : IGameStateProvider
         
     public GameStateData GameState { get; private set; }
         
-    public GameStatePlayerPrefsProvider(InventoryGridConfig gridConfig)
+    public GameStatePlayerPrefsProvider(GameplayConfig config)
     {
-        _gridConfig = gridConfig;
+        _gridConfig = config.InventoryGridConfig;
     }
         
     public void Save()

@@ -4,10 +4,13 @@ using TMPro;
 
 public class HotbarSlotView : MonoBehaviour
 {
+    [SerializeField] private Image _slotImage;
     [SerializeField] private Image _iconImage;
+    
     [SerializeField] private TextMeshProUGUI _amountText;
-    [SerializeField] private Image _highlight;
-
+    
+    [SerializeField] private DisplaySlotIconProperty _displaySlotIconProperty;
+    
     private InventorySlot _slot;
 
     public void Bind(InventorySlot slot, bool active)
@@ -26,11 +29,25 @@ public class HotbarSlotView : MonoBehaviour
         else
         {
             _iconImage.enabled = true;
-            _iconImage.sprite = _slot.GetItem().ItemIcon;
+            _iconImage.sprite = _slot.Config.ItemIcon;
 
-            _amountText.text = _slot.GetItem().IsStackable && _slot.Amount > 1 ? _slot.Amount.ToString() : "";
+            _amountText.text = _slot.Config.IsStackable && _slot.Amount > 1 ? _slot.Amount.ToString() : "";
         }
+        
+        DisplaySlotIconByItemType(active);
+    }
+    
+    private void DisplaySlotIconByItemType(bool highlighted = false)
+    {
+        if (_slot == null)
+            return;
 
-        _highlight.enabled = active;
+        if (_slot.IsEmpty)
+        {
+            _slotImage.sprite = highlighted ? _displaySlotIconProperty.HighlightedCellSprite : _displaySlotIconProperty.EmptyCellSprite;
+            return;
+        }
+        
+        _slotImage.sprite = highlighted ? _displaySlotIconProperty.HighlightedCellSprite : _displaySlotIconProperty.NonEmptyCellSprite;
     }
 }

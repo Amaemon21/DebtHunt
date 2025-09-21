@@ -5,10 +5,7 @@ public class HotbarGrid
 {
     private readonly List<InventorySlot> _slots;
     public int Capacity => _slots.Count;
-    
-    public IReadOnlyList<InventorySlot> Slots => _slots;
-    //public InventorySlot ActiveSlot => (_activeIndex.Value >= 0 && _activeIndex.Value < _slots.Count) ? _slots[_activeIndex.Value] : null;
-    
+
     private ReactiveProperty<int> _activeIndex;
     public ReadOnlyReactiveProperty<int> ActiveIndex => _activeIndex;
 
